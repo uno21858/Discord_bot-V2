@@ -1,0 +1,4 @@
+2020-06-08 21:26:06,761:DEBUG:discord.client: on_ready has successfully been registered as an event
+2020-06-08 21:26:06,762:INFO:discord.client: logging in using static token
+2020-06-08 21:26:07,348:INFO:discord.client: Cleaning up tasks.
+2020-06-08 21:26:07,349:INFO:discord.client: Closing the event loop.
