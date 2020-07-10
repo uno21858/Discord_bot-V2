@@ -18,7 +18,7 @@ from os import system
 
 
 
-client = commands.Bot(command_prefix = '$')
+client = commands.Bot(command_prefix = '/')
 
 
 @client.event
@@ -122,9 +122,8 @@ async def leave(ctx):
 		await ctx.send("Don't think I am in a voice channel")
 
 @client.command(pass_context=True, aliases=['p', 'pla'])
-async def play(ctx, url: str):
-	global name 
-
+async def play(ctx, url: str): 
+	global name
 	def check_queue():
 		Queue_infile = os.path.isdir("./Queue")
 		if Queue_infile is True:
@@ -132,7 +131,7 @@ async def play(ctx, url: str):
 			length = len(os.listdir(DIR))
 			still_q = length - 1 
 			try:
-				first_file = os.listdir(DIR) [0]
+				first_file = os.listdir(DIR)[0]
 			except:
 				print("No more queued song(s)\n")
 				queues.clear()
@@ -184,7 +183,7 @@ async def play(ctx, url: str):
 
 
 
-	await ctx.send("Getting everything now you CUNT")
+	await ctx.send("Getting everything now")
 
 	voice = get(client.voice_clients, guild=ctx.guild)
 
@@ -216,21 +215,25 @@ async def play(ctx, url: str):
 	voice.source = discord.PCMVolumeTransformer(voice.source)
 	voice.source.volume = 0.07
 
-	nname = name.rsplit("-", 2)
-	await ctx.send(f"Playing: {nname}")
+	try:
+		nname = name.rsplit("-", 2)
+		await ctx.send(f"Playing: {nname[0]}")
+	except:
+		await ctx.send(f"Playing Song")
 	print("playing\n")
 
 @client.command(passcontext=True, aliases=['pa', 'pau'])
 async def pause(ctx):
-	voice = get(client.voice_clients, guild=ctx.guild)
-	
-	if voice and voice.is_playing():
-		print("Music stopped")
-		voice.pause()
-		await ctx.send("Music stopped")
-	else:
-		print("Music not playing failed pause")
-		await ctx.send("Music not playing failed to stop")
+
+    voice = get(client.voice_clients, guild=ctx.guild)
+
+    if voice and voice.is_playing():
+        print("Music paused")
+        voice.pause()
+        await ctx.send("Music paused")
+    else:
+        print("Music not playing failed pause")
+        await ctx.send("Music not playing failed pause")
 
 @client.command(passcontext=True, aliases=['r', 're'])
 async def resume(ctx):
@@ -276,7 +279,7 @@ async def queue(ctx, url: str):
 			add_queue = False
 			queues[q_num] = q_num
 
-	queue_path = os.path.abspath(os.path.realpath("Queue") + f"\song(q_num).%%(ext)s")
+	queue_path = os.path.abspath(os.path.realpath("Queue") + f"\song{q_num}.%%(ext)s")
 
 	ydl_opts = {
 		'format': 'bestaudio/best',
@@ -292,15 +295,27 @@ async def queue(ctx, url: str):
 		with youtube_dl.YoutubeDL(ydl_opts) as ydl:
 			print("Downloading audio now\n")
 			ydl.download([url])
-		await ctx.send("Adding song " + str(q_num) + " to the queue")
+		
 
 	except:
 		print("FALLBACK: youtube-dl does nor support this URL, using Spotify (This is normal if Spotify URl)")
-		q_path = os.path.abspath(os.path.realpath("Queue"))
-		system(f"spotdl -f song(q_num) -f " + '"' + q_path + '"' + " -s " + url)
+		
+		system(f"spotdl -f " + '"' + queue_path + '"' + " -s " + url)
 
-
+	await ctx.send("Adding song " + str(q_num) + " to the queue")
 
 	print("Song added to queue\n")
 
-client.run("Add the thing here ")
+@client.command(pass_context=True, aliases=['s', 'ski'])
+async def skip(ctx):
+    voice = get(client.voice_clients, guild=ctx.guild)
+
+    if voice and voice.is_playing():
+        print("Playing Next Song")
+        voice.stop()
+        await ctx.send("Next Song")
+    else:
+        print("No music playing")
+        await ctx.send("No music playing failed")
+
+client.run("NzE5OTE3MjIyNzc2Mjc1MDE0.Xuemjg.GPCix4YwimDjzqgLjtMGaq_0CRc")
