@@ -318,4 +318,4 @@ async def skip(ctx):
         print("No music playing")
         await ctx.send("No music playing failed")
 
-client.run("NzE5OTE3MjIyNzc2Mjc1MDE0.Xuemjg.GPCix4YwimDjzqgLjtMGaq_0CRc")
+client.run("no thing to see here")
